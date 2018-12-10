@@ -1,6 +1,6 @@
 # docker-scaleio-gw [![](https://images.microbadger.com/badges/image/vchrisb/scaleio-gw.svg)](https://microbadger.com/images/vchrisb/scaleio-gw "Get your own image badge on microbadger.com")
 
-This image runs EMC ScaleIO as a container.
+This image runs EMC ScaleIO-GW-2.5 as a container.
 
 ## How to use this image
 
