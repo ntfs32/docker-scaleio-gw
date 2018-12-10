@@ -1,10 +1,10 @@
 # docker-scaleio-gw [![](https://images.microbadger.com/badges/image/vchrisb/scaleio-gw.svg)](https://microbadger.com/images/vchrisb/scaleio-gw "Get your own image badge on microbadger.com")
 
-This image runs EMC ScaleIO as a container.
+This image runs EMC ScaleIO-GW-2.5 as a container.
 
 ## How to use this image
 
-```sudo docker run -d --name=scaleio-gw vchrisb/scaleio-gw```
+```sudo docker run -d --name=docker-scaleio-gw sergeymatsak/docker-scaleio-gw```
 
 The following environment variables are also honored for configuring your ScaleIO Gateway instance:
 * `-e GW_PASSWORD=` (Gateway password, defaults to `Scaleio123`)
@@ -16,9 +16,9 @@ The following environment variables are also honored for configuring your ScaleI
 
 ### Examples
 
-```docker run -d --name=scaleio-gw --restart=always -p 443:443 -e GW_PASSWORD=Scaleio123 -e MDM1_IP_ADDRESS=192.168.100.1 -e MDM2_IP_ADDRESS=192.168.100.2 -e TRUST_MDM_CRT=true vchrisb/scaleio-gw```
+```docker run -d --name=scaleio-gw --restart=always -p 443:443 -e GW_PASSWORD=Scaleio123 -e MDM1_IP_ADDRESS=192.168.100.1 -e MDM2_IP_ADDRESS=192.168.100.2 -e TRUST_MDM_CRT=true sergeymatsak/docker-scaleio-gw```
 
-```docker run -d --name scaleio-gw --restart=always -p 443:443 -e GW_PASSWORD=Scaleio123 -e MDM1_IP_ADDRESS=192.168.100.1 -e MDM2_IP_ADDRESS=192.168.100.2 -e TRUST_MDM_CRT=true -e GW_KEY="$GW_KEY" -e GW_CRT="$GW_CRT" vchrisb/scaleio-gw```
+```docker run -d --name scaleio-gw --restart=always -p 443:443 -e GW_PASSWORD=Scaleio123 -e MDM1_IP_ADDRESS=192.168.100.1 -e MDM2_IP_ADDRESS=192.168.100.2 -e TRUST_MDM_CRT=true -e GW_KEY="$GW_KEY" -e GW_CRT="$GW_CRT" sergeymatsak/docker-scaleio-gw```
 
 ### Docker Tags
 
@@ -36,7 +36,7 @@ You can either generate your own self-signed certificate or add signed certifica
   
 ##### create a self-signed certificate is
 ```
-openssl req -x509 -sha256 -newkey rsa:2048 -keyout certificate.key -out certificate.crt -days 1024 -nodes -subj '/CN=scaleio-gw.marathon.mesos'
+openssl req -x509 -sha256 -newkey rsa:2048 -keyout certificate.key -out certificate.crt -days 1024 -nodes -subj '/CN=scaleio-gw.net'
 export GW_KEY=$(cat certificate.key | sed ':a;N;$!ba;s/\n/\\n/g')
 export GW_CRT=$(cat certificate.crt | sed ':a;N;$!ba;s/\n/\\n/g')
 ```
@@ -58,38 +58,6 @@ export MDM2_IP_ADDRESS=x.x.x.x
 export MDM1_CRT=$(ssh -qt $MDM1_IP_ADDRESS sudo cat /opt/emc/scaleio/mdm/cfg/mdm_management_certificate.pem | sed -n -e '/-----BEGIN CERTIFICATE-----/,$p' | tr -d "\r" | sed ':a;N;$!ba;s/\n/\\n/g')
 export MDM2_CRT=$(ssh -qt $MDM2_IP_ADDRESS sudo cat /opt/emc/scaleio/mdm/cfg/mdm_management_certificate.pem | sed -n -e '/-----BEGIN CERTIFICATE-----/,$p' | tr -d "\r" | sed ':a;N;$!ba;s/\n/\\n/g')
 ```
-
-## DC/OS with RexRay
-
-RexRay, a vendor agnostic storage orchestration engine supported by DC/OS, requires a high available connection to the ScaleIO Gateway if using ScaleIO as a storage provider. Normally runnig the gateway on a host makes it harder to maintain the installation and making the gateway redundant. Running the ScaleIO gateway as a container in Mesos makes it much easier to achieve these goals.
-The gateway can be reached from within the mesos cluster via `<scaleio-gw name>.marathon.mesos`. To be able to know the the port of the container, you have to use currently a defined `host port`. Using a `VIP`is investigated.  
-Please have a look at the sample marathon file `scaleio-gw.json`.
-
-## Docker Swarm with RexRay
-
-When using Docker Swarm with RexRay and ScaleIO, it is desired to have a high available ScaleIO Gateway.
-One can start the ScaleIO Gateway Docker image on the swarm cluster with following command.
-`sudo docker service create --replicas 2 --name=scaleio-gw -p 8443:443 -e GW_PASSWORD=<gw password> -e MDM1_IP_ADDRESS=<mdm1 ip address> -e MDM2_IP_ADDRESS=<mdm2 ip address> -e TRUST_MDM_CRT=true vchrisb/scaleio-gw`
-The gateway is reachable by accessing any of the swarm nodes on port `8443`. This is possible by swarms network feature.
-An example RexRay configuration could look like:
-
-```
-libstorage:
-  service: scaleio
-scaleio:
-  endpoint: https://127.0.0.1:8443/api
-  insecure: true
-  usecerts: true
-  userName: admin
-  password: Scaleio123
-  systemName: Vagrant
-  protectionDomainName: pd1
-  storagePoolName: sp1
-  thinOrThick: ThinProvisioned
-```
-
-For testing the scaleio gateway docker image with docker swarm, you can try out [vagrant-swarm](https://github.com/vchrisb/vagrant-swarm)
-
 
 ## Support
 
