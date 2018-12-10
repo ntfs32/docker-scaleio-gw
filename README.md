@@ -59,8 +59,4 @@ export MDM2_CRT=$(ssh -qt $MDM2_IP_ADDRESS sudo cat /opt/emc/scaleio/mdm/cfg/mdm
 ## Support
 
 If you need generic help with the ScaleIO Gateway please reach out to the [ScaleIO Community ](https://community.emc.com/community/products/scaleio)  or the [EMC CodeCommunity](http://community.emccode.com/) on Slack in the `scaleio_rest`channel.
-For problems or questions regarding the Docker Image please report an issue on [GitHub](https://github.com/vchrisb/docker-scaleio-gw/issues).
-
-## Disclaimer
-
-This is not an official EMC product/solution. Use at your own risk!
+For problems or questions regarding the Docker Image please report an issue on [GitHub](https://github.com/sergeymatsak87/docker-scaleio-gw/issues).
