@@ -26,7 +26,7 @@ fi
 
 if [ -v NO_SECURE_COMMUNICATION ]; then
         echo "Allow no-secure communication with MDM"
-        sed -i 's/gateway-security.allow_non_secure_communication=false/gateway-security.allow_non_secure_communication=true/g' /opt/emc/scaleio/gateway/webapps/ROOT/WEB-INF/classes/gatewayUser.properties
+        sed -i "s/gateway-security.allow_non_secure_communication.*/gateway-security.allow_non_secure_communication=true/" /opt/emc/scaleio/gateway/webapps/ROOT/WEB-INF/classes/gatewayUser.properties
 fi
 
 if [ -v BYPASS_CRT_CHECK ]; then
