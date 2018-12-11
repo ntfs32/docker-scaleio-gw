@@ -23,7 +23,9 @@ The following environment variables are also honored for configuring your ScaleI
 
 ### Docker Tags
 
-* latest -> v2.5.0.0
+* latest -> v2.5.1.0
+* v2.5.1.0
+* v2.5.0.0
 
 ## certificates
 
