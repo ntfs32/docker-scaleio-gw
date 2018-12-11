@@ -13,6 +13,7 @@ The following environment variables are also honored for configuring your ScaleI
 * `-e TRUST_MDM_CRT=` (if variable is set with a non empty value will the MDM certificate being trusted)
 * `-e GW_KEY=` and `-e GW_CRT=` (public certificate and private key to be used)
 * `-e BYPASS_CRT_CHECK=` (if variable is set with a non empty value will the certificate check for the MDMs and LIAs bypassed)
+* `-e NO_SECURE_COMMUNICATION=` (if variable is set with "true" will allow no-secure communication with MDMs, defaults to `false`)
 
 ### Examples
 
