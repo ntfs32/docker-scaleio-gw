@@ -24,6 +24,11 @@ else
 	keytool -genkey -alias "Scaleio_Gateway" -dname "OU=ASD, O=EMC, C=US, ST=Massachusetts, L=Hopkinton, CN=Scaleio_Gateway" -keyalg RSA -validity 360 -keysize 2048 -storepass $KEYSTORE_PASS -keypass $KEYSTORE_PASS -keystore $KEYSTORE
 fi
 
+if [ -v NO_SECURE_COMMUNICATION ]; then
+        echo "Allow no-secure communication with MDM"
+        sed -i 's/gateway-security.allow_non_secure_communication=false/gateway-security.allow_non_secure_communication=true/g' /opt/emc/scaleio/gateway/webapps/ROOT/WEB-INF/classes/gatewayUser.properties
+fi
+
 if [ -v BYPASS_CRT_CHECK ]; then
 	echo "Bypass MDM security check"
 	sed -i "s/security.bypass_certificate_check.*/security.bypass_certificate_check=true/" /opt/emc/scaleio/gateway/webapps/ROOT/WEB-INF/classes/gatewayUser.properties
